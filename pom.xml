@@ -19,7 +19,7 @@
     <description>Team Task Manager - Project and Task Management API</description>
 
     <properties>
-        <java.version>23</java.version>
+        <java.version>17</java.version>
         <jjwt.version>0.12.6</jjwt.version>
         <lombok.version>1.18.36</lombok.version>
     </properties>
