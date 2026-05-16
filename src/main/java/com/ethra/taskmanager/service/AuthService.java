@@ -53,6 +53,26 @@ public class AuthService {
         return new AuthResponse(token, UserResponse.fromEntity(user));
     }
 
+    @Transactional
+    public AuthResponse registerAdmin(RegisterRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new DuplicateResourceException(
+                    "An account with this email already exists");
+        }
+
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail().toLowerCase().trim())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.ADMIN)
+                .build();
+
+        user = userRepository.save(user);
+
+        String token = tokenProvider.generateToken(user.getEmail());
+        return new AuthResponse(token, UserResponse.fromEntity(user));
+    }
+
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
